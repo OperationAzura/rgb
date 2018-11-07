@@ -64,14 +64,40 @@ class Light:
 	
 	dutyCycleUp = True
 	dutyCycle = 0
-	pin = 0
-		
+	Pin = 0
+	pwmHz = 255
+	pwm = GPIO.PWM
+
+	def SetPWM():
+		self.pwm = GPIO.PWM(self.pin, self.pwmHz)
+	def StartPWM():
+		self.pwm.start(0)
+	def LightPWM():
+		self.pwm.ChangeDutyCycle(dutyCycle)
+		self.IncrementDutyCycle()
+	#IncrementDutyCycle will either increment or decrement as dutycycle cannot go above 100 or below 0
+	def IncrementDutyCycle()
+		#set dutyCycleUp
+		if self.dutyCycle == 0:
+			self.dutyCycleUp = True
+		else if self.dutyCycle == 100:
+			self.dutyCycleUp = False
+		if dutyCycleUp == True: #increment
+			self.dutyCycle = self.dutyCycle + 1
+		else: #decrement
+			self.dutyCycle = self.dutyCycle - 1
+
 t = 1
 flashTime = 300
 blue = 2
 red = 3
 green = 4
 pwmHz = 255
+
+a = Light()
+a.pin = green
+a.SetPWM()
+a.StartPWM()
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -90,6 +116,8 @@ redPWM.start(100)
 greenPWM.start(100)
 while True:
 	WhiteOff()
+	while True:
+		a.LightPWM()
 	while True:
 		bx = 100
 		rx = 50
@@ -143,5 +171,4 @@ while True:
 		#GPIO.output(pin, GPIO.LOW)
 		#GPIO.output(pin2, GPIO.LOW)
 		#GPIO.output(pin3, GPIO.LOW)
-		#time.sleep(0.1)
-
+#time.sleep(0.1)
