@@ -68,6 +68,14 @@ class Light:
 	pwmHz = 255
 	pwm = GPIO.PWM
 
+	def __init__(self, pin, dutyCycle, pwmHz):
+		GPIO.setup(pin, GPIO.OUT)
+		self.pin = pin
+		self.pwmHz = pwmHz
+		self.SetPWM()
+		self.dutyCycle = dugyCycle
+		self.StartPWM(dutyCycle)
+
 	def SetPWM(self):
 		self.pwm = GPIO.PWM(self.pin, self.pwmHz)
 	def StartPWM(self,dc):
@@ -100,35 +108,9 @@ red = 3
 green = 4
 pwmHz = 255
 
-GPIO.setup(blue, GPIO.OUT)
-GPIO.setup(red, GPIO.OUT)
-GPIO.setup(green, GPIO.OUT)
-
-
-g = Light()
-b = Light()
-r = Light()
-g.pin = green
-b.pin = blue
-r.pin = red
-g.SetPWM()
-b.SetPWM()
-r.SetPWM()
-g.StartPWM(0)
-b.StartPWM(50)
-r.StartPWM(100)
-
-bluePWM = GPIO.PWM(blue, pwmHz)
-redPWM = GPIO.PWM(red, pwmHz)
-greenPWM = GPIO.PWM(green, pwmHz)
-b.dutyCycle = 100
-r.dutyCycle = 50
-g.dutyCycle = 0
-
-#pins act as ground, so 100 = off
-#bluePWM.start(100)
-#redPWM.start(100)
-#greenPWM.start(100)
+g = Light(green, 33, 100)
+b = Light(blue, 66, 100)
+r = Light(red, 99, 100)
 while True:
 	WhiteOff()
 	while True:
@@ -137,57 +119,3 @@ while True:
 		b.LightPWM()
 		r.LightPWM()
 		
-	while True:
-		bx = 100
-		rx = 50
-		gx = 0
-		while bx > 0:
-			#greenPWM.ChangeDutyCycle(gx)
-			#redPWM.ChangeDutyCycle(rx)
-			bluePWM.ChangeDutyCycle(bx)
-			bx = bx - 1
-			rx = rx - 1
-			gx = gx + 1
-			time.sleep(.05)
-		while bx < 100:
-			#greenPWM.ChangeDutyCycle(gx)
-			#redPWM.ChangeDutyCycle(rx)
-			bluePWM.ChangeDutyCycle(bx)
-			bx = bx + 1
-			rx = rx + 1 
-			gx = gx - 11
-			time.sleep(.05)
-
-	YellowOn()
-	time.sleep(t)
-	YellowOff()
-	CyanOn()
-	time.sleep(t)
-	CyanOff()
-	WhiteOn()
-	time.sleep(t)
-	WhiteOff()
-	
-	PurpleOn()
-	time.sleep(t)
-	PurpleOff()
-	RedOn()
-	time.sleep(t)
-	RedOff()
-	BlueOn()
-	time.sleep(t)
-	BlueOff()
-	GreenOn()
-	time.sleep(t)
-	GreenOff()
-
-	print"flashing light"
-	#for x in range (flashTime):
-		#GPIO.output(pin, GPIO.HIGH)
-		#GPIO.output(pin2, GPIO.HIGH)
-		#GPIO.output(pin3, GPIO.HIGH)
-		#time.sleep(0.1)
-		#GPIO.output(pin, GPIO.LOW)
-		#GPIO.output(pin2, GPIO.LOW)
-		#GPIO.output(pin3, GPIO.LOW)
-#time.sleep(0.1)
