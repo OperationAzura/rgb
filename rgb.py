@@ -73,7 +73,7 @@ class Light:
 		self.pin = pin
 		self.pwmHz = pwmHz
 		self.SetPWM()
-		self.dutyCycle = dugyCycle
+		self.dutyCycle = dutyCycle
 		self.StartPWM(dutyCycle)
 
 	def SetPWM(self):
@@ -100,7 +100,6 @@ class Light:
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-
 t = 1
 flashTime = 300
 blue = 2
@@ -108,14 +107,14 @@ red = 3
 green = 4
 pwmHz = 255
 
-g = Light(green, 33, 100)
-b = Light(blue, 66, 100)
-r = Light(red, 99, 100)
+g = Light(green, 33, 50)
+b = Light(blue, 66, 50)
+r = Light(red, 99, 50)
 while True:
 	WhiteOff()
 	while True:
 		g.LightPWM()
-		time.sleep(.01)
+		time.sleep(.06)
 		b.LightPWM()
 		r.LightPWM()
 		
