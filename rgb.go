@@ -1,15 +1,18 @@
 package main
 
 import (
+	"sync"
 	"time"
 
 	rpio "github.com/go-rpio"
 )
 
+var wg = new(sync.WaitGroup)
+
 func main() {
-	var t = 1
 	var flashTime = 300
 	var pwmHz = 55 * time.Nanosecond
+	var dutyCycle = 100
 
 	rpio.Open()
 	defer rpio.Close()
@@ -22,14 +25,20 @@ func main() {
 	greenPin.Output()
 
 	for {
-		redPin.Low()
-		bluePin.Low()
-		greenPin.Low()
-		time.Sleep(pwmHz)
-		redPin.High()
-		bluePin.High()
-		greenPin.High()
-		time.Sleep(pwmHz)
+		go pinOn(pwmHz, dutyCycle, &redPin)
+		go pinOn(pwmHz, dutyCycle, &bluePin)
+		go pinOn(pwmHz, dutyCycle, &greenPin)
+		wg.Wait()
 	}
+}
 
+func pinOn(pwmHz, dutyCycle int, pin rpio.Pin) bool {
+	wg.Add()
+	var hz = pwmHz * time.Millisecond
+	var pulse = ((dutyCycle / 10) * pwmHz) * time.Millisecond
+	pin.High()
+	time.Sleep(pulse)
+	pin.Low()
+	time.Sleep(pulse)
+	wg.Done()
 }
