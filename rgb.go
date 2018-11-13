@@ -9,7 +9,7 @@ import (
 func main() {
 	var t = 1
 	var flashTime = 300
-	var pwmHz = 55
+	var pwmHz = time.Duration{55}
 
 	rpio.Open()
 	defer rpio.Close()
