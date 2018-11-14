@@ -16,8 +16,8 @@ import (
 var wg = new(sync.WaitGroup)
 
 func main() {
-	var pwmHz = 60
-	var dutyCycle = 100
+	var pwmHz = 0.60
+	var dutyCycle = 100.99
 	rpio.Open()
 	defer rpio.Close()
 
