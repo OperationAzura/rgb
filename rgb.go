@@ -52,13 +52,13 @@ func pinOn(pwmHz, dutyCycle int, pin *rpio.Pin) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	var tOffString = strconv.Itoa(pwmHz - timeOn)
+	var tOffString = strconv.Itoa(pwmHz - tOn)
 	timeOff, err := time.ParseDuration((tOffString + "ms"))
 	if err != nil {
 		fmt.Println(err)
 	}
 	pin.High()
-	time.Sleep(tOn)
+	time.Sleep(timeOn)
 	pin.Low()
 	time.Sleep(timeOff)
 	wg.Done()
