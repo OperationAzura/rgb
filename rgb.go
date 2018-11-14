@@ -44,15 +44,15 @@ func main() {
 
 }
 
-func pinOn(pwmHz, dutyCycle int, pin *rpio.Pin) {
+func pinOn(pwmHz, dutyCycle float64, pin *rpio.Pin) {
 	//wg.Add(1)
 	var tOn = (dutyCycle / 100) * pwmHz
-	var tOnString = strconv.Itoa(tOn)
+	var tOnString = strconv.FormatFloat(tOn, 'f', 6, 64//strconv.Itoa(tOn)
 	timeOn, err := time.ParseDuration((tOnString + "ms"))
 	if err != nil {
 		fmt.Println(err)
 	}
-	var tOffString = strconv.Itoa(pwmHz - tOn)
+	var tOffString = strconv.FormatFloat((pwmHz - tOn), 'f', 6, 64//strconv.Itoa(pwmHz - tOn)
 	timeOff, err := time.ParseDuration((tOffString + "ms"))
 	if err != nil {
 		fmt.Println(err)
