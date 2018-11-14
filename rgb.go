@@ -28,8 +28,6 @@ func main() {
 	greenPin := rpio.Pin(4)
 	greenPin.Output()
 
-	
-/*
 	for {
 		wg.Add(1)
 		go pinOn(pwmHz, dutyCycle, &redPin)
@@ -39,23 +37,28 @@ func main() {
 		go pinOn(pwmHz, dutyCycle, &greenPin)
 		wg.Wait()
 		//dutyCycle--
-		if dutyCycle < 0{
+		if dutyCycle < 0 {
 			dutyCycle = 100
 		}
 	}
-	*/
+
 }
 
 func pinOn(pwmHz, dutyCycle int, pin *rpio.Pin) {
 	//wg.Add(1)
-	var pString = strconv.Itoa((dutyCycle  / 100 ) * pwmHz)
-	pulse, err := time.ParseDuration((pString+"ms"))
-	if err != nil{
+	var tOnString = strconv.Itoa((dutyCycle / 100) * pwmHz)
+	timeOn, err := time.ParseDuration((tOnString + "ms"))
+	if err != nil {
+		fmt.Println(err)
+	}
+	var tOffString = strconv.Itoa(pwmHz - timeOn)
+	timeOff, err := time.ParseDuration((tOffString + "ms"))
+	if err != nil {
 		fmt.Println(err)
 	}
 	pin.High()
-	time.Sleep(pulse)
+	time.Sleep(tOn)
 	pin.Low()
-	time.Sleep(pulse )
+	time.Sleep(tOff)
 	wg.Done()
 }
