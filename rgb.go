@@ -57,8 +57,8 @@ func pinOn(pwmHz, dutyCycle int, pin *rpio.Pin) {
 		fmt.Println(err)
 	}
 	pin.High()
-	time.Sleep(tOn)
+	time.Sleep(timeOn)
 	pin.Low()
-	time.Sleep(tOff)
+	time.Sleep(timeOff)
 	wg.Done()
 }
