@@ -17,11 +17,12 @@ import (
 var wg = new(sync.WaitGroup)
 
 func main() {
-	var pwmHz = 160.00
-	var dutyCycle = 30.00
+	var pwmHz = 60.00
+	var dutyCycle = 70.00
 	rpio.Open()
 	defer rpio.Close()
 
+	_ = wg
 	bluePin := rpio.Pin(2)
 	bluePin.High()
 	bluePin.Output()
@@ -32,6 +33,10 @@ func main() {
 	greenPin := rpio.Pin(4)
 	greenPin.High()
 	greenPin.Output()
+
+	fmt.Println("tOn: ",tOn)
+	fmt.Println("tOff: ",tOff)
+
 
 	for {
 		redPin.High()
@@ -44,7 +49,7 @@ func main() {
 		//go pinOn(pwmHz, dutyCycle, &bluePin)
 		//wg.Add(1)
 		//go pinOn(pwmHz, dutyCycle, &greenPin)
-		wg.Wait()
+		//wg.Wait()
 		//dutyCycle--
 	}
 
@@ -77,7 +82,7 @@ func pinOn(pwmHz, dutyCycle float64, pin *rpio.Pin) {
 }
 
 //CalcPWM calculates the on off times for a softPWM
-func CalcPWM(dutyCycle, pwmHz float64) (string, string) {
+func CalcPWM(dutyCycle, pwmHz float64) (time.Duration, time.Duration) {
 	var tOn = (dutyCycle / 100) * (1 / pwmHz)
 	var tOnString = strconv.FormatFloat(tOn, 'f', 6, 64) //strconv.Itoa(tOn)
 	timeOn, err := time.ParseDuration((tOnString + "ms"))
