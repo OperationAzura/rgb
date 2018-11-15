@@ -39,46 +39,29 @@ func main() {
 
 
 	for {
+		/*
 		redPin.High()
 		time.Sleep(tOff)
 		redPin.Low()
 		time.Sleep(tOn)
-		//wg.Add(1)
-		//pinOn(pwmHz, dutyCycle, &redPin)
-		//wg.Add(1)
-		//go pinOn(pwmHz, dutyCycle, &bluePin)
-		//wg.Add(1)
-		//go pinOn(pwmHz, dutyCycle, &greenPin)
-		//wg.Wait()
-		//dutyCycle--
+		*/
+		wg.Add(1)
+		pinOn(tOn, tOff, , &redPin)
+		wg.Add(1)
+		go pinOn(tOn, tOff, , &bluePin)
+		wg.Add(1)
+		go pinOn(tOn, tOff, , &greenPin)
+		wg.Wait()
 	}
 
 }
 
-func pinOn(pwmHz, dutyCycle float64, pin *rpio.Pin) {
-	start := time.Now()
-	//wg.Add(1)
-	var tOn = (dutyCycle / 100) * (1 / pwmHz)
-	var tOnString = strconv.FormatFloat(tOn, 'f', 6, 64) //strconv.Itoa(tOn)
-	timeOn, _ := time.ParseDuration((tOnString + "ms"))
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	var tOffString = strconv.FormatFloat(((1 / pwmHz) - tOn), 'f', 6, 64) //strconv.Itoa(pwmHz - tOn)
-	timeOff, _ := time.ParseDuration((tOffString + "ms"))
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	fmt.Println("tOff: ", timeOn)
-	fmt.Println("tOn", timeOff)
-	//os.Exit(1)
+func pinOn(timeOn, timeOff time.Duration pin *rpio.Pin) {
 	pin.High()
 	time.Sleep(timeOff)
 	pin.Low()
 	time.Sleep(timeOn)
 	wg.Done()
-	fmt.Println("it took: ", time.Since(start))
-	os.Exit(1)
 }
 
 //CalcPWM calculates the on off times for a softPWM
